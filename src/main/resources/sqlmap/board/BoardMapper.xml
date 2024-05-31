@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vue_study.board.mapper.BoardMapper">
+
+    <resultMap id="BoardInfo" type="com.example.vue_study.board.info.BoardInfo"/>
+    <select id="selectUserList" resultMap="BoardInfo">
+        /* SQL ID : BoardMapper.selectUserList */
+        SELECT * FROM MBR_CUST_USER
+    </select>
+
+    <insert id="insert">
+        /* SQL ID : CustUserMapper.insert */
+        /* SQL Server에서는 저장 프로시저 호출 시 중괄호 {}를 사용하지 않습니다. 대신 EXEC 또는 EXECUTE 키워드를 사용합니다. */
+    <![CDATA[
+        EXEC USP_INSERT_MBR_CUST_USER
+        #{custSn},
+        #{emlAddr},
+        #{userPswdEvl},
+        #{userNm},
+        #{mblTelSeCdEvl},
+        #{mblTelOnoEvl},
+        #{mblTelSnEvl},
+        #{telRgnCdEvl},
+        #{telOnoEvl},
+        #{telSnEvl},
+        #{deptNm},
+        #{jbpsNm},
+        #{roleCd}
+        ]]>
+    </insert>
+
+
+</mapper>

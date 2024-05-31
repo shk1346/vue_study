@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.0'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testCompileOnly 'org.projectlombok:lombok' /* test 코드 log */
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    implementation(group: 'commons-beanutils', name: 'commons-beanutils', version:'1.9.2') {
+        exclude(module: 'commons-logging')
+    }
+
+    dependencies {
+        implementation 'com.microsoft.sqlserver:mssql-jdbc:9.2.1.jre8' //JDBC 드라이버
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    jvmArgs '-Xshare:off' // JVM 아규먼트 설정 'OpenJDK 64-Bit Server VM warning' 지우기
+}

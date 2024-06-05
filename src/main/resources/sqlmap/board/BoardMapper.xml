@@ -8,8 +8,12 @@
         SELECT * FROM MBR_CUST_USER
     </select>
 
+    <select id="selectUserInfo" resultMap="BoardInfo">
+        SELECT * FROM MBR_CUST_USER WHERE USER_SN = #{userSn}
+    </select>
+
     <insert id="insert">
-        /* SQL ID : CustUserMapper.insert */
+        /* SQL ID : BoardMapper.insert */
         /* SQL Server에서는 저장 프로시저 호출 시 중괄호 {}를 사용하지 않습니다. 대신 EXEC 또는 EXECUTE 키워드를 사용합니다. */
     <![CDATA[
         EXEC USP_INSERT_MBR_CUST_USER
@@ -28,6 +32,24 @@
         #{roleCd}
         ]]>
     </insert>
+
+    <update id="update">
+        /* SQL ID : BoardMapper.update */
+        <![CDATA[
+            EXEC USP_UPDATE_MBR_CUST_USER_DATA
+            #{userSn},
+            null,
+            #{userNm},
+            null,
+            null,
+            null,
+            #{deptNm},
+            #{jbpsNm},
+            null,
+            null,
+            null
+        ]]>
+    </update>
 
 
 </mapper>

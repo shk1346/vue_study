@@ -21,8 +21,15 @@ public class BoardService {
         return boardMapper.selectUserList();
     }
 
+    public BoardInfo selectUserInfo(int userSn){
+        return boardMapper.selectUserInfo(userSn);
+    }
+
     public void insert (BoardInfo info){
-        log.info("BoardService BoardInfo ======== " + info);
         boardMapper.insert(info);
+    }
+
+    public void update(BoardInfo info){
+        boardMapper.update(info);
     }
 }

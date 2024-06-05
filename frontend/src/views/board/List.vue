@@ -17,8 +17,12 @@
       <tbody>
       <tr v-for="(row, idx) in list" :key="idx">
         <td>{{ row.userSn }}</td>
+
+
+<!--        <td><a v-on:click="fnView(`${row.idx}`)">{{ row.title }}</a></td>-->
+<!--        <router-link :to="`/product/${productNo}`">상품  {{ index + 1 }}  </router-link>-->
         <td>
-          <router-link v-bind:to="'/board/write/'+row.userSn">
+          <router-link v-bind:to="`/board/detail/${row.userSn}`">
             {{ row.userNm }}
           </router-link>
         </td>

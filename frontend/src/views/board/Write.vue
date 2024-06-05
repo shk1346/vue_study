@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>게시판 등록</h1>
+    <h1>{{ vueNm }}</h1>
 
     <div class="AddWrap">
       <form>
@@ -34,7 +34,7 @@
       <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnSave">등록</button>-->
 
       <a href="javascript:;" @click="fnList" class="btn">목록</a>
-      <a href="javascript:;" v-on:click="fnSave" class="btnAdd btn">등록</a>
+      <a href="javascript:;" v-on:click="fnSave" class="btnAdd btn">저장</a>
     </div>
   </div>
 </template>
@@ -47,17 +47,47 @@ export default {
       userNm:'',
       deptNm:'',
       jbpsNm:'',
+      userSn:'', // userSn을 전역 변수로 정의
+      vueNm:'',
       form: ''
     }
   },
   mounted() {
-    //this.fnList(); > 왜 문제???
+    // userSn을 초기화
+    this.userSn = this.$route.params.userSn; //URL 파라미터에서 userSn을 가져옴
+    if(this.userSn !== undefined){
+      this.vueNm = '게시글 수정'
+    }else{
+      this.vueNm = '게시글 등록'
+    }
+    this.fnDetail();
   },
   methods: {
     fnList(){
       this.$router.push({ path: '/board/list', query: this.form });
     },
+    fnDetail(){
+    //  const userSn = this.$route.params.userSn; //URL 파라미터에서 userSn을 가져옴
+
+      if(this.userSn !== undefined){
+        // 템플릿 리터럴을 사용하여 URL을 구성 (백틱 사용 > 문자열로 인식)
+        this.$axios.get(this.$serverUrl+`/board/detail/${this.userSn}`)
+            .then(res => {
+              // Vue 컴포넌트의 데이터 설정
+              this.userInfo = res.data;
+              this.userNm = res.data.userNm;
+              this.deptNm = res.data.deptNm;
+              this.jbpsNm = res.data.jbpsNm;
+
+            })
+            .catch(err => {
+              console.log(err);
+            });
+      }
+
+    },
     fnSave(){
+
       if(!this.userNm){
         alert("이름을 입력해주세요.");
         this.$refs.userNm.focus();
@@ -72,26 +102,57 @@ export default {
         return;
       }
 
-      this.form = {
-        userNm: this.userNm,
-        deptNm: this.deptNm,
-        jbpsNm: this.jbpsNm
+
+      if(this.userSn !== undefined){ //수정
+        this.form = {
+          userNm: this.userNm,
+          deptNm: this.deptNm,
+          jbpsNm: this.jbpsNm,
+          userSn: this.userSn
+        }
+
+        this.$axios.put(this.$serverUrl+'/board/write', this.form)
+            .then((res)=>{
+              console.log('수정 res.data ', res.data);
+              console.log('수정 res ', res);
+
+              if(res.data.success){
+                alert("수정되었습니다.");
+                this.fnList();
+              }else {
+                alert("수정이 실패되었습니다.");
+              }
+            }).catch((err)=>{
+          console.log(err);
+        })
+
+
+      } else { //신규저장
+        this.form = {
+          userNm: this.userNm,
+          deptNm: this.deptNm,
+          jbpsNm: this.jbpsNm
+        }
+
+        this.$axios.post(this.$serverUrl+'/board/write', this.form)
+            .then((res)=>{
+              console.log('신규저장 res.data ', res.data);
+              console.log('신규저장 res ', res);
+
+              if(res.data.success){
+                alert("등록되었습니다.");
+                this.fnList();
+              }else {
+                alert("등록이 실패되었습니다.");
+              }
+            }).catch((err)=>{
+          console.log(err);
+        })
       }
 
-      this.$axios.post(this.$serverUrl+'/board/write', this.form)
-          .then((res)=>{
-            console.log(res.data);
-            console.log(res);
 
-        if(res.data.success){
-          alert("등록되었습니다.");
-          this.fnList();
-        }else {
-          alert("등록이 실패되었습니다.");
-        }
-      }).catch((err)=>{
-        console.log(err);
-      })
+
+
 
 
     }

@@ -39,14 +39,7 @@ public class BoardController {
     @PostMapping("/write")
     public ResponseEntity<Map<String,Object>> write(@RequestBody BoardInfo info){
 
-        log.info("BoardController BoardInfo ======== " + toString(info));
-
         Map<String,Object> response = new HashMap<>();
-
-        BoardInfo newBoard = new BoardInfo();
-        newBoard.setUserNm(info.getUserNm());
-        newBoard.setDeptNm(info.getDeptNm());
-        newBoard.setJbpsNm(info.getJbpsNm());
 
         info.setEmlAddr("shk@co.com");
         info.setUserPswdEvl("@1234");
@@ -69,6 +62,32 @@ public class BoardController {
         }
 
 
+    }
+
+    @GetMapping("/detail/{userSn}")
+    public BoardInfo detail(@PathVariable("userSn") int userSn){
+        log.info("detail userSn======== " + userSn);
+
+        BoardInfo userInfo = boardService.selectUserInfo(userSn);
+        return userInfo;
+    }
+
+    @PutMapping("/write")
+    public ResponseEntity<Map<String,Object>> update(@RequestBody BoardInfo info){
+        log.info("update BoardInfo ======== " + toString(info));
+
+        Map<String,Object> response = new HashMap<>();
+
+        try {
+            boardService.update(info);
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e){
+            response.put("success", false);
+            response.put("message", "수정에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     public static String toString(Object obj) {

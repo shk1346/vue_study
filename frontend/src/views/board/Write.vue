@@ -37,7 +37,7 @@
       <a href="javascript:;" v-on:click="fnSave" class="btnAdd btn">저장</a>
     </div>
   </div>
-</template>
+</template>ㅇ
 
 <script>
 export default {

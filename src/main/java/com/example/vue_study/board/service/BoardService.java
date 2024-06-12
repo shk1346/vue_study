@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -17,8 +18,11 @@ public class BoardService {
     @Autowired
     BoardMapper boardMapper;
 
-    public List<BoardInfo> selectUserList() {
-        return boardMapper.selectUserList();
+    public List<BoardInfo> selectUserList(Map<String, Object> param) {
+        return boardMapper.selectUserList(param);
+    }
+    public int selectUserListCnt(Map<String, Object> param) {
+        return boardMapper.selectUserListCnt(param);
     }
 
     public BoardInfo selectUserInfo(int userSn){
@@ -31,5 +35,9 @@ public class BoardService {
 
     public void update(BoardInfo info){
         boardMapper.update(info);
+    }
+
+    public void delete(BoardInfo info){
+        boardMapper.delete(info);
     }
 }

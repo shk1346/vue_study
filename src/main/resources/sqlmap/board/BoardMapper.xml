@@ -3,9 +3,49 @@
 <mapper namespace="com.example.vue_study.board.mapper.BoardMapper">
 
     <resultMap id="BoardInfo" type="com.example.vue_study.board.info.BoardInfo"/>
+
     <select id="selectUserList" resultMap="BoardInfo">
         /* SQL ID : BoardMapper.selectUserList */
-        SELECT * FROM MBR_CUST_USER
+        SELECT *
+        FROM MBR_CUST_USER
+        WHERE USER_STTS_CD = '1'
+        <if test='param.searchKey != null and param.searchKey != "" '>
+            <choose>
+                <when test='param.searchKey.equals("userNm")'>
+                    AND USER_NM LIKE CONCAT('%', #{param.searchWord}, '%')
+                </when>
+                <when test='param.searchKey.equals("deptNm")'>
+                    AND DEPT_NM LIKE CONCAT('%', #{param.searchWord}, '%')
+                </when>
+                <when test='param.searchKey.equals("jbpsNm")'>
+                    AND JBPS_NM LIKE CONCAT('%', #{param.searchWord}, '%')
+                </when>
+            </choose>
+        </if>
+        ORDER BY USER_SN ASC
+        OFFSET #{param.startIndex, jdbcType=INTEGER} ROWS
+        FETCH NEXT #{param.rowCnt, jdbcType=INTEGER} ROWS ONLY /*TOP 또는 FETCH 절의 행 개수 매개 변수에 지정하는 행 개수는 정수여야 합니다.*/
+    </select>
+
+    <!-- 회원 목록 전체 건수 조회 -->
+    <select id="selectUserListCnt" resultType="int">
+        /* SQL ID : BoardMapper.selectUserListCnt */
+        SELECT COUNT(*)
+        FROM MBR_CUST_USER
+        WHERE USER_STTS_CD = '1'
+        <if test='param.searchKey != null and param.searchKey != "" '>
+            <choose>
+                <when test='param.searchKey.equals("userNm")'>
+                    AND USER_NM LIKE CONCAT('%', #{param.searchWord}, '%')
+                </when>
+                <when test='param.searchKey.equals("deptNm")'>
+                    AND DEPT_NM LIKE CONCAT('%', #{param.searchWord}, '%')
+                </when>
+                <when test='param.searchKey.equals("jbpsNm")'>
+                    AND JBPS_NM LIKE CONCAT('%', #{param.searchWord}, '%')
+                </when>
+            </choose>
+        </if>
     </select>
 
     <select id="selectUserInfo" resultMap="BoardInfo">
@@ -48,6 +88,16 @@
             null,
             null,
             null
+        ]]>
+    </update>
+
+    <update id="delete">
+        /* SQL ID : BoardMapper.delete */
+        <![CDATA[
+        EXEC USP_DELETE_MBR_CUST_USER_DATA
+            #{userSn},
+            #{updtMngrUserSn},
+            #{updtCustUserSn}
         ]]>
     </update>
 

@@ -41,6 +41,7 @@
 
       <a href="javascript:;" @click="fnList" class="btn">목록</a>
       <a href="javascript:;" v-on:click="fnWrite" class="btnAdd btn">수정</a>
+      <a href="javascript:;" v-on:click="fnDelete" class="btn">수정</a>
     </div>
   </div>
 </template>
@@ -48,6 +49,7 @@
 <script>
 export default {
   name: "Detail",
+  /* data : 상태(state) 컴포넌트 간 공유할 수 있는 데이터 */
   data(){ //변수생성
     return {
       userInfo:null,
@@ -85,6 +87,15 @@ export default {
     },
     fnWrite(){
       this.$router.push({ path: `/board/write/${this.userSn}`, query: this.form });
+    },
+    fnDelete(){
+      this.$axios.delete(this.$serverUrl+"/board/delete",{
+        data: { userSn: this.userSn } // data 속성을 객체로 감싸야 함
+      }).then(() => {
+        this.fnList();
+      }).catch((err) => {
+        console.log(err);
+      })
     }
   }
 }

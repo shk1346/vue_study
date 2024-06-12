@@ -14,6 +14,7 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item><router-link to="/" >Home></router-link></b-nav-item>
           <b-nav-item><router-link to="/board/list" >Board</router-link></b-nav-item>
+          <b-nav-item><router-link to="/board/member" >Member</router-link></b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

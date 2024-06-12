@@ -17,9 +17,9 @@ class VueStudyApplicationTests {
     BoardService boardService;
     @Test
     void contextLoads() {
-        List<BoardInfo> list = boardService.selectUserList();
+    //    List<BoardInfo> list = boardService.selectUserList();
 
-        log.info("VueStudyApplicationTests list ======== " + toString(list));
+    //    log.info("VueStudyApplicationTests list ======== " + toString(list));
     }
 
     public static String toString(Object obj) {
